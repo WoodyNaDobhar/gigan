@@ -1,0 +1,145 @@
+Challenge wait: block out the weeks (weeks table)
+being inactive drops you to the bottom 
+
+
+artisan infyom:api_scaffold Challenge --factory --fromTable --tableName=challenges --ignoreFields=created_by,updated_by,deleted_by,created_at,updated_at,deleted_at --jqueryDT
+artisan infyom:api_scaffold Flexer --factory --fromTable --tableName=flexers --ignoreFields=created_by,updated_by,deleted_by,created_at,updated_at,deleted_at --jqueryDT
+artisan infyom:api_scaffold Kingdom --factory --fromTable --tableName=kingdoms --ignoreFields=created_by,updated_by,deleted_by,created_at,updated_at,deleted_at --jqueryDT
+artisan infyom:api_scaffold Land --factory --fromTable --tableName=lands --ignoreFields=created_by,updated_by,deleted_by,created_at,updated_at,deleted_at --jqueryDT
+artisan infyom:api_scaffold User --factory --fromTable --tableName=users --ignoreFields=created_by,updated_by,deleted_by,created_at,updated_at,deleted_at --jqueryDT
+artisan infyom:api_scaffold Week --factory --fromTable --tableName=weeks --ignoreFields=created_by,updated_by,deleted_by,created_at,updated_at,deleted_at --jqueryDT
+
+-- --------------------------------------------------------
+-- Host:                         127.0.0.1
+-- Server version:               8.0.28 - MySQL Community Server - GPL
+-- Server OS:                    Linux
+-- HeidiSQL Version:             11.3.0.6295
+-- --------------------------------------------------------
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET NAMES utf8 */;
+/*!50503 SET NAMES utf8mb4 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+-- Dumping structure for table gigan.challenges
+CREATE TABLE IF NOT EXISTS `challenges` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `challenger_id` bigint unsigned NOT NULL,
+  `challenged_id` bigint unsigned NOT NULL,
+  `week_id` bigint unsigned NOT NULL,
+  `winner_id` bigint unsigned NOT NULL,
+  `challenger_rank` smallint unsigned NOT NULL,
+  `challenged_rank` bigint unsigned NOT NULL,
+  `video` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `created_by` bigint unsigned NOT NULL DEFAULT '1',
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `updated_by` bigint unsigned DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL,
+  `deleted_by` bigint unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `challenger_id` (`challenger_id`),
+  KEY `challenged_id` (`challenged_id`),
+  KEY `week_id` (`week_id`),
+  KEY `winner_id` (`winner_id`),
+  KEY `created_by` (`created_by`),
+  KEY `updated_by` (`updated_by`),
+  KEY `deleted_by` (`deleted_by`),
+  CONSTRAINT `challenges_challenged_id` FOREIGN KEY (`challenged_id`) REFERENCES `flexers` (`id`),
+  CONSTRAINT `challenges_challenger_id` FOREIGN KEY (`challenger_id`) REFERENCES `flexers` (`id`),
+  CONSTRAINT `challenges_created_by` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`),
+  CONSTRAINT `challenges_deleted_by` FOREIGN KEY (`deleted_by`) REFERENCES `users` (`id`),
+  CONSTRAINT `challenges_updated_by` FOREIGN KEY (`updated_by`) REFERENCES `users` (`id`),
+  CONSTRAINT `challenges_week_id` FOREIGN KEY (`week_id`) REFERENCES `weeks` (`id`),
+  CONSTRAINT `challenges_winner_id` FOREIGN KEY (`winner_id`) REFERENCES `flexers` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Data exporting was unselected.
+
+-- Dumping structure for table gigan.flexers
+CREATE TABLE IF NOT EXISTS `flexers` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `orkID` bigint unsigned NOT NULL,
+  `rank` smallint unsigned NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `created_by` bigint unsigned NOT NULL DEFAULT '1',
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `updated_by` bigint unsigned DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL,
+  `deleted_by` bigint unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `created_by` (`created_by`),
+  KEY `updated_by` (`updated_by`),
+  KEY `deleted_by` (`deleted_by`),
+  CONSTRAINT `flexers_created_by` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`),
+  CONSTRAINT `flexers_deleted_by` FOREIGN KEY (`deleted_by`) REFERENCES `users` (`id`),
+  CONSTRAINT `flexers_updated_by` FOREIGN KEY (`updated_by`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Data exporting was unselected.
+
+-- Dumping structure for table gigan.kingdoms
+CREATE TABLE IF NOT EXISTS `kingdoms` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `label` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `image` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `created_by` bigint unsigned NOT NULL DEFAULT '1',
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `updated_by` bigint unsigned DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL,
+  `deleted_by` bigint unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `created_by` (`created_by`),
+  KEY `updated_by` (`updated_by`),
+  KEY `deleted_by` (`deleted_by`),
+  CONSTRAINT `kingdoms_created_by` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`),
+  CONSTRAINT `kingdoms_deleted_by` FOREIGN KEY (`deleted_by`) REFERENCES `users` (`id`),
+  CONSTRAINT `kingdoms_updated_by` FOREIGN KEY (`updated_by`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Data exporting was unselected.
+
+-- Dumping structure for table gigan.lands
+CREATE TABLE IF NOT EXISTS `lands` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `kingdom_id` bigint unsigned NOT NULL,
+  `label` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `image` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `created_by` bigint unsigned NOT NULL DEFAULT '1',
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `updated_by` bigint unsigned DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL,
+  `deleted_by` bigint unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `kingdom_id` (`kingdom_id`),
+  KEY `created_by` (`created_by`),
+  KEY `updated_by` (`updated_by`),
+  KEY `deleted_by` (`deleted_by`),
+  CONSTRAINT `lands_created_by` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`),
+  CONSTRAINT `lands_deleted_by` FOREIGN KEY (`deleted_by`) REFERENCES `users` (`id`),
+  CONSTRAINT `lands_kingdom_id` FOREIGN KEY (`kingdom_id`) REFERENCES `kingdoms` (`id`),
+  CONSTRAINT `lands_updated_by` FOREIGN KEY (`updated_by`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Data exporting was unselected.
+
+-- Dumping structure for table gigan.weeks
+CREATE TABLE IF NOT EXISTS `weeks` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `starts_at` timestamp NULL DEFAULT NULL,
+  `ends_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Data exporting was unselected.
+
+/*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
+/*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40111 SET SQL_NOTES=IFNULL(@OLD_SQL_NOTES, 1) */;
